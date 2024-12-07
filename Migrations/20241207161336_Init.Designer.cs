@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using api.Data;
+using api.Infrastructure.Data;
 
 #nullable disable
 
 namespace api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241207115318_AddLoans")]
-    partial class AddLoans
+    [Migration("20241207161336_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,7 +20,7 @@ namespace api.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
 
-            modelBuilder.Entity("api.Entities.Book", b =>
+            modelBuilder.Entity("api.Core.Entities.Book", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -34,16 +34,22 @@ namespace api.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("LoanId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("LoanId")
+                        .IsUnique();
+
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("api.Entities.Loan", b =>
+            modelBuilder.Entity("api.Core.Entities.Loan", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -69,14 +75,12 @@ namespace api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Loans");
                 });
 
-            modelBuilder.Entity("api.Entities.User", b =>
+            modelBuilder.Entity("api.Core.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -103,23 +107,34 @@ namespace api.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("api.Entities.Loan", b =>
+            modelBuilder.Entity("api.Core.Entities.Book", b =>
                 {
-                    b.HasOne("api.Entities.Book", "Book")
-                        .WithMany()
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("api.Core.Entities.Loan", "Loan")
+                        .WithOne("Book")
+                        .HasForeignKey("api.Core.Entities.Book", "LoanId");
 
-                    b.HasOne("api.Entities.User", "User")
-                        .WithMany()
+                    b.Navigation("Loan");
+                });
+
+            modelBuilder.Entity("api.Core.Entities.Loan", b =>
+                {
+                    b.HasOne("api.Core.Entities.User", "User")
+                        .WithMany("Loans")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Book");
-
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("api.Core.Entities.Loan", b =>
+                {
+                    b.Navigation("Book");
+                });
+
+            modelBuilder.Entity("api.Core.Entities.User", b =>
+                {
+                    b.Navigation("Loans");
                 });
 #pragma warning restore 612, 618
         }

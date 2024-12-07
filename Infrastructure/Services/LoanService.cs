@@ -17,12 +17,12 @@ namespace api.Infrastructure.Services
 
         public async Task<LoanDTO?> CreateLoan(CreateLoanDTO request)
         {
-            var user = await _context.Users.FindAsync(request.UserId);
+            var user = await _context.Users.Where(u => u.Id == request.UserId).FirstOrDefaultAsync();
             if (user == null)
             {
                 throw new KeyNotFoundException($"User with id {request.UserId} not found!");
             }
-            var book = await _context.Books.FindAsync(request.BookId);
+            var book = await _context.Books.Where(b => b.Id == request.BookId).FirstOrDefaultAsync();
             if (book == null)
             {
                 throw new InvalidOperationException($"Book with id {request.BookId} not found!");
@@ -48,7 +48,8 @@ namespace api.Infrastructure.Services
             {
                 throw new KeyNotFoundException($"Loan with id {id} not found!");
             }
-            if(loan.IsReturned){
+            if (loan.IsReturned)
+            {
                 return;
             }
             loan.IsReturned = true;

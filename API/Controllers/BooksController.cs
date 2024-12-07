@@ -6,24 +6,17 @@ namespace api.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class BooksController : ControllerBase
+    public class BooksController(IBookService bookService) : ControllerBase
     {
-        private readonly IBookService _bookService;
-
-        public BooksController(IBookService bookService)
-        {
-            _bookService = bookService;
-        }
-
         [HttpGet]
-        public async Task<ActionResult<List<BookDTO>>> GetAllBooks()
+        public async Task<ActionResult<List<BookDTO>>> GetAllBooks([FromQuery] bool? returned)
         {
-            return Ok(await _bookService.GetAllBooks());
+            return Ok(await bookService.GetAllBooks(returned));
         }
         [HttpPost]
         public async Task<ActionResult<BookDTO>> AddBook([FromBody] CreateBookDTO request)
         {
-            return Ok(await _bookService.AddBook(request));
+            return Ok(await bookService.AddBook(request));
         }
     }
 }

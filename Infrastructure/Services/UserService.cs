@@ -18,7 +18,6 @@ namespace api.Infrastructure.Services
         {
             var user = new User
             {
-                Id = Guid.NewGuid(),
                 FirstName = request.FistName,
                 LastName = request.LastName,
                 Email = request.Email,

@@ -3,7 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using api.Data;
+using api.Infrastructure.Data;
 
 #nullable disable
 
@@ -17,7 +17,7 @@ namespace api.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
 
-            modelBuilder.Entity("api.Entities.Book", b =>
+            modelBuilder.Entity("api.Core.Entities.Book", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -46,7 +46,7 @@ namespace api.Migrations
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("api.Entities.Loan", b =>
+            modelBuilder.Entity("api.Core.Entities.Loan", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -77,7 +77,7 @@ namespace api.Migrations
                     b.ToTable("Loans");
                 });
 
-            modelBuilder.Entity("api.Entities.User", b =>
+            modelBuilder.Entity("api.Core.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -104,18 +104,18 @@ namespace api.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("api.Entities.Book", b =>
+            modelBuilder.Entity("api.Core.Entities.Book", b =>
                 {
-                    b.HasOne("api.Entities.Loan", "Loan")
+                    b.HasOne("api.Core.Entities.Loan", "Loan")
                         .WithOne("Book")
-                        .HasForeignKey("api.Entities.Book", "LoanId");
+                        .HasForeignKey("api.Core.Entities.Book", "LoanId");
 
                     b.Navigation("Loan");
                 });
 
-            modelBuilder.Entity("api.Entities.Loan", b =>
+            modelBuilder.Entity("api.Core.Entities.Loan", b =>
                 {
-                    b.HasOne("api.Entities.User", "User")
+                    b.HasOne("api.Core.Entities.User", "User")
                         .WithMany("Loans")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -124,12 +124,12 @@ namespace api.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("api.Entities.Loan", b =>
+            modelBuilder.Entity("api.Core.Entities.Loan", b =>
                 {
                     b.Navigation("Book");
                 });
 
-            modelBuilder.Entity("api.Entities.User", b =>
+            modelBuilder.Entity("api.Core.Entities.User", b =>
                 {
                     b.Navigation("Loans");
                 });

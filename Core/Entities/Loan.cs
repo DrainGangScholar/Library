@@ -19,7 +19,6 @@ namespace api.Core.Entities
         {
             return new Loan
             {
-                Id = Guid.NewGuid(),
                 UserId = user.Id,
                 User = user,
                 BookId = book.Id,

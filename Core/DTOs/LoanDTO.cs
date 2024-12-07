@@ -5,9 +5,9 @@ namespace api.Core.DTOs
     public record LoanDTO
     {
         public Guid Id { get; init; }
-        public required string FullName { get; init; } = String.Empty;
-        public required string Email { get; init; } = String.Empty;
-        public required string BookName { get; init; } = String.Empty;
+        public required string FullName { get; init; } = string.Empty;
+        public required string Email { get; init; } = string.Empty;
+        public required string BookName { get; init; } = string.Empty;
         public required DateOnly BorrowedDate { get; init; }
         public required DateOnly DueDate { get; init; }
         public DateOnly? ReturnedDate { get; set; }

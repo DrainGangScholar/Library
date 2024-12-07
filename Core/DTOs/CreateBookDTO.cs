@@ -4,6 +4,6 @@ namespace api.Core.DTOs
     {
         public required string ISBN { get; init; }
         public required string Name { get; init; }
-        public string Description { get; init; } = String.Empty;
+        public string Description { get; init; } = string.Empty;
     }
 }

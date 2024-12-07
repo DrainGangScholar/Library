@@ -15,9 +15,21 @@ namespace api.Infrastructure.Services
             _context = context;
         }
 
-        public async Task<List<BookDTO>> GetAllBooks()
+        public async Task<List<BookDTO>> GetAllBooks(bool? returned)
         {
-            var books = await _context.Books.ToListAsync();
+            var booksQuery = _context.Books.AsQueryable();
+            if (returned != null)
+            {
+                if (returned.Value)
+                {
+                    booksQuery = booksQuery.Where(r => r.LoanId == null);
+                }
+                else
+                {
+                    booksQuery = booksQuery.Where(r => r.LoanId != null);
+                }
+            }
+            var books = await booksQuery.ToListAsync();
             if (books == null)
             {
                 return BookDTO.EmptyList();
@@ -29,7 +41,6 @@ namespace api.Infrastructure.Services
         {
             var book = new Book
             {
-                Id = Guid.NewGuid(),
                 ISBN = request.ISBN,
                 Name = request.Name,
                 Description = request.Description

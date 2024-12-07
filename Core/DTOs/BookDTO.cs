@@ -11,14 +11,14 @@ namespace api.Core.DTOs
         public required bool IsBorrowed { get; set; }
         public static BookDTO From(Book book)
         {
-            var IsBorrowed = book.LoanId != null;
+            var isBorrowed = book.LoanId != null;
             return new BookDTO
             {
                 Id = book.Id,
                 Name = book.Name,
                 Description = book.Description,
                 ISBN = book.ISBN,
-                IsBorrowed = IsBorrowed
+                IsBorrowed = isBorrowed
             };
         }
 
