@@ -1,7 +1,6 @@
+using api.Core.DTOs;
+using api.Core.Services;
 using Microsoft.AspNetCore.Mvc;
-using api.Data;
-using api.Services;
-using api.DTOs;
 
 namespace api.Controllers
 {
@@ -11,7 +10,7 @@ namespace api.Controllers
     {
         private readonly ILoanService _loanService;
 
-        public LoansController(DataContext context, ILoanService loanService)
+        public LoansController( ILoanService loanService)
         {
             _loanService = loanService;
         }

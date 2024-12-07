@@ -1,5 +1,6 @@
-using api.Entities;
-namespace api.DTOs
+using api.Core.Entities;
+
+namespace api.Core.DTOs
 {
     public record LoanDTO
     {

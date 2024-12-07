@@ -1,6 +1,6 @@
-using api.DTOs;
+using api.Core.DTOs;
 
-namespace api.Services
+namespace api.Core.Services
 {
     public interface ILoanService
     {

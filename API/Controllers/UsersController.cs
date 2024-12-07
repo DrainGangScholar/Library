@@ -1,8 +1,6 @@
+using api.Core.DTOs;
+using api.Core.Services;
 using Microsoft.AspNetCore.Mvc;
-using api.Data;
-using api.Services;
-using api.DTOs;
-
 namespace api.Controllers
 {
     [ApiController]
@@ -11,7 +9,7 @@ namespace api.Controllers
     {
         private readonly IUserService _userService;
 
-        public UsersController(DataContext context, IUserService userService)
+        public UsersController( IUserService userService)
         {
             _userService = userService;
         }

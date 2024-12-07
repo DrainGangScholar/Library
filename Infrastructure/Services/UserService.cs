@@ -1,9 +1,10 @@
-using api.DTOs;
-using api.Data;
-using api.Entities;
+using api.Core.DTOs;
+using api.Core.Entities;
+using api.Core.Services;
+using api.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace api.Services
+namespace api.Infrastructure.Services
 {
     public class UserService : IUserService
     {

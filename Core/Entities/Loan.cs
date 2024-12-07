@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-using api.DTOs;
-namespace api.Entities
+using api.Core.DTOs;
+namespace api.Core.Entities
 {
     public class Loan
     {

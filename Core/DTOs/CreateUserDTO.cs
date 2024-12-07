@@ -1,4 +1,4 @@
-namespace api.DTOs
+namespace api.Core.DTOs
 {
     public record CreateUserDTO
     {

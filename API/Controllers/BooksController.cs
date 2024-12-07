@@ -1,10 +1,8 @@
+using api.Core.DTOs;
+using api.Core.Services;
 using Microsoft.AspNetCore.Mvc;
-using api.Entities;
-using api.Data;
-using api.Services;
-using api.DTOs;
 
-namespace api.Controllers
+namespace api.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -12,7 +10,7 @@ namespace api.Controllers
     {
         private readonly IBookService _bookService;
 
-        public BooksController(IBookService bookService, DataContext context)
+        public BooksController(IBookService bookService)
         {
             _bookService = bookService;
         }
@@ -23,7 +21,7 @@ namespace api.Controllers
             return Ok(await _bookService.GetAllBooks());
         }
         [HttpPost]
-        public async Task<ActionResult<Book>> AddBook([FromBody] CreateBookDTO request)
+        public async Task<ActionResult<BookDTO>> AddBook([FromBody] CreateBookDTO request)
         {
             return Ok(await _bookService.AddBook(request));
         }

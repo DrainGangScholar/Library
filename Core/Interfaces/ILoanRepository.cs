@@ -1,4 +1,4 @@
-namespace api.Data.Repositories
+namespace api.Core.Repositories
 {
     public interface ILoanRepository 
     {
