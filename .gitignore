@@ -45,3 +45,5 @@ msbuild.wrn
 library.db
 library.db-shm
 library.db-wal
+
+obj/
