@@ -41,3 +41,7 @@ bld/
 msbuild.log
 msbuild.err
 msbuild.wrn
+
+library.db
+library.db-shm
+library.db-wal
