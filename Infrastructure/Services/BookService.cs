@@ -1,39 +1,22 @@
 using api.Core.DTOs;
 using api.Core.Entities;
+using api.Core.Interfaces;
 using api.Core.Services;
-using api.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace api.Infrastructure.Services
 {
     public class BookService : IBookService
     {
-        private readonly DataContext _context;
+        private readonly IBookRepository _repository;
 
-        public BookService(DataContext context)
+        public BookService(IBookRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
-        public async Task<List<BookDTO>> GetAllBooks(bool? returned)
+        public async Task<List<BookDTO>> GetAllBooks(bool? isBorrowed)
         {
-            var booksQuery = _context.Books.AsQueryable();
-            if (returned != null)
-            {
-                if (returned.Value)
-                {
-                    booksQuery = booksQuery.Where(r => r.LoanId == null);
-                }
-                else
-                {
-                    booksQuery = booksQuery.Where(r => r.LoanId != null);
-                }
-            }
-            var books = await booksQuery.ToListAsync();
-            if (books == null)
-            {
-                return BookDTO.EmptyList();
-            }
+            var books = await _repository.GetAllBooks(isBorrowed);
             return (books.Select(b => BookDTO.From(b)).ToList());
         }
 
@@ -45,9 +28,8 @@ namespace api.Infrastructure.Services
                 Name = request.Name,
                 Description = request.Description
             };
-            await _context.AddAsync(book);
-            await _context.SaveChangesAsync();
-            return BookDTO.From(book);
+            var createdBook = await _repository.AddBook(book);
+            return BookDTO.From(createdBook);
         }
     }
 }

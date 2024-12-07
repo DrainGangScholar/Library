@@ -19,10 +19,5 @@ namespace api.Core.DTOs
                 LastName = u.LastName,
             };
         }
-
-        internal static List<UserDTO> EmptyList()
-        {
-            return new List<UserDTO> { };
-        }
     }
 }

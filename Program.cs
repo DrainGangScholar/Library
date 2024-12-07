@@ -1,6 +1,9 @@
+using api.Core.Interfaces;
 using api.Core.Services;
 using api.Infrastructure.Data;
+using api.Infrastructure.Repositories;
 using api.Infrastructure.Services;
+using api.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +23,10 @@ builder.Services.AddDbContext<DataContext>(o =>
 {
     o.UseSqlite(builder.Configuration["ConnectionStrings:DefaultConnection"]);
 }, ServiceLifetime.Scoped);
+builder.Services.AddScoped<IBookRepository, BookRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ILoanRepository, LoanRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ILoanService, LoanService>();

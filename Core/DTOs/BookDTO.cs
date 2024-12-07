@@ -21,10 +21,5 @@ namespace api.Core.DTOs
                 IsBorrowed = isBorrowed
             };
         }
-
-        internal static List<BookDTO> EmptyList()
-        {
-            return new List<BookDTO> { };
-        }
     }
 }

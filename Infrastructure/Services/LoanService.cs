@@ -1,5 +1,6 @@
 using api.Core.DTOs;
 using api.Core.Entities;
+using api.Core.Interfaces;
 using api.Core.Services;
 using api.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -9,20 +10,48 @@ namespace api.Infrastructure.Services
     class LoanService : ILoanService
     {
         private readonly DataContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public LoanService(DataContext context)
+        public LoanService(DataContext context, IUnitOfWork unitOfWork)
         {
             _context = context;
+            _unitOfWork = unitOfWork;
         }
+
+        //        public async Task<LoanDTO?> CreateLoan(CreateLoanDTO request)
+        //        {
+        //            var user = await _context.Users.Where(u => u.Id == request.UserId).FirstOrDefaultAsync();
+        //            if (user == null)
+        //            {
+        //                throw new KeyNotFoundException($"User with id {request.UserId} not found!");
+        //            }
+        //            var book = await _context.Books.Where(b => b.Id == request.BookId).FirstOrDefaultAsync();
+        //            if (book == null)
+        //            {
+        //                throw new InvalidOperationException($"Book with id {request.BookId} not found!");
+        //            }
+        //            if (book.LoanId != null)
+        //            {
+        //                throw new InvalidOperationException($"Book with id {request.BookId} is already borrowed!");
+        //            }
+        //            var loan = Loan.From(request, user, book);
+        //            _context.Loans.Add(loan);
+        //
+        //            book.LoanId = loan.Id;
+        //            _context.Books.Update(book);
+        //
+        //            await _context.SaveChangesAsync();
+        //            return LoanDTO.From(loan);
+        //        }
 
         public async Task<LoanDTO?> CreateLoan(CreateLoanDTO request)
         {
-            var user = await _context.Users.Where(u => u.Id == request.UserId).FirstOrDefaultAsync();
+            var user = await _unitOfWork.Users.GetByIdAsync(request.UserId);
             if (user == null)
             {
                 throw new KeyNotFoundException($"User with id {request.UserId} not found!");
             }
-            var book = await _context.Books.Where(b => b.Id == request.BookId).FirstOrDefaultAsync();
+            var book = await _unitOfWork.Books.GetByIdAsync(request.BookId);
             if (book == null)
             {
                 throw new InvalidOperationException($"Book with id {request.BookId} not found!");
@@ -32,12 +61,12 @@ namespace api.Infrastructure.Services
                 throw new InvalidOperationException($"Book with id {request.BookId} is already borrowed!");
             }
             var loan = Loan.From(request, user, book);
-            _context.Loans.Add(loan);
+            Loan? createdLoan = await _unitOfWork.Loans.AddAsync(loan);
 
             book.LoanId = loan.Id;
-            _context.Books.Update(book);
+            _unitOfWork.Books.Update(book);
 
-            await _context.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
             return LoanDTO.From(loan);
         }
 

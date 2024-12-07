@@ -9,9 +9,9 @@ namespace api.API.Controllers
     public class BooksController(IBookService bookService) : ControllerBase
     {
         [HttpGet]
-        public async Task<ActionResult<List<BookDTO>>> GetAllBooks([FromQuery] bool? returned)
+        public async Task<ActionResult<List<BookDTO>>> GetAllBooks([FromQuery] bool? isBorrowed)
         {
-            return Ok(await bookService.GetAllBooks(returned));
+            return Ok(await bookService.GetAllBooks(isBorrowed));
         }
         [HttpPost]
         public async Task<ActionResult<BookDTO>> AddBook([FromBody] CreateBookDTO request)

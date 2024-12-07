@@ -1,7 +1,9 @@
-namespace api.Core.Repositories
-{
-    public interface ILoanRepository 
-    {
+using api.Core.Entities;
 
+namespace api.Core.Interfaces
+{
+    public interface ILoanRepository
+    {
+        Task<Loan?> AddAsync(Loan loan);
     }
 }

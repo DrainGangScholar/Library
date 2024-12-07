@@ -1,17 +1,16 @@
 using api.Core.DTOs;
 using api.Core.Entities;
+using api.Core.Interfaces;
 using api.Core.Services;
-using api.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace api.Infrastructure.Services
 {
     public class UserService : IUserService
     {
-        private readonly DataContext _context;
-        public UserService(DataContext context)
+        private readonly IUserRepository _repository;
+        public UserService(IUserRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         public async Task<UserDTO> AddUser(CreateUserDTO request)
@@ -23,28 +22,19 @@ namespace api.Infrastructure.Services
                 Email = request.Email,
                 Password = request.Password,
             };
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-            return UserDTO.FromUser(user);
+            var createdUser = await _repository.AddAsync(user);
+            return UserDTO.FromUser(createdUser);
         }
 
         public async Task<UserDTO?> GetUser(Guid id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-            {
-                return null;
-            }
+            var user = await _repository.FindAsync(id);
             return UserDTO.FromUser(user);
         }
 
         public async Task<List<UserDTO>> GetAllUsers()
         {
-            var users = await _context.Users.ToListAsync();
-            if (users == null)
-            {
-                return UserDTO.EmptyList();
-            }
+            var users = await _repository.GetAllAsync();
             return users.Select(u => UserDTO.FromUser(u)).ToList();
         }
     }
