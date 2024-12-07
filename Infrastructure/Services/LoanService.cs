@@ -18,32 +18,6 @@ namespace api.Infrastructure.Services
             _unitOfWork = unitOfWork;
         }
 
-        //        public async Task<LoanDTO?> CreateLoan(CreateLoanDTO request)
-        //        {
-        //            var user = await _context.Users.Where(u => u.Id == request.UserId).FirstOrDefaultAsync();
-        //            if (user == null)
-        //            {
-        //                throw new KeyNotFoundException($"User with id {request.UserId} not found!");
-        //            }
-        //            var book = await _context.Books.Where(b => b.Id == request.BookId).FirstOrDefaultAsync();
-        //            if (book == null)
-        //            {
-        //                throw new InvalidOperationException($"Book with id {request.BookId} not found!");
-        //            }
-        //            if (book.LoanId != null)
-        //            {
-        //                throw new InvalidOperationException($"Book with id {request.BookId} is already borrowed!");
-        //            }
-        //            var loan = Loan.From(request, user, book);
-        //            _context.Loans.Add(loan);
-        //
-        //            book.LoanId = loan.Id;
-        //            _context.Books.Update(book);
-        //
-        //            await _context.SaveChangesAsync();
-        //            return LoanDTO.From(loan);
-        //        }
-
         public async Task<LoanDTO?> CreateLoan(CreateLoanDTO request)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(request.UserId);
@@ -72,7 +46,7 @@ namespace api.Infrastructure.Services
 
         public async Task FinishLoan(Guid id)
         {
-            var loan = await _context.Loans.Where(l => l.Id == id).Include(l => l.Book).Include(l => l.User).FirstOrDefaultAsync();
+            var loan = await _unitOfWork.Loans.GetByIdWithIncludesAsync(id, l => l.Book, l => l.User);
             if (loan == null)
             {
                 throw new KeyNotFoundException($"Loan with id {id} not found!");
@@ -89,9 +63,9 @@ namespace api.Infrastructure.Services
             }
             var book = loan.Book;
             book.LoanId = null;
-            _context.Books.Update(book);
-            _context.Loans.Update(loan);
-            await _context.SaveChangesAsync();
+            _unitOfWork.Books.Update(book);
+            _unitOfWork.Loans.Update(loan);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task<List<LoanDTO>> GetAllLoans(bool? returned)

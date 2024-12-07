@@ -34,6 +34,7 @@ namespace api.Infrastructure.Repositories
         public async Task<Book> AddBook(Book book)
         {
             var createdBook = await _context.Books.AddAsync(book);
+            await _context.SaveChangesAsync();
             return createdBook.Entity;
         }
 
@@ -45,7 +46,7 @@ namespace api.Infrastructure.Repositories
 
         public void Update(Book book)
         {
-             _context.Books.Update(book);
+            _context.Books.Update(book);
         }
     }
 }
