@@ -32,5 +32,16 @@ namespace api.Infrastructure.Repositories
         {
             _context.Update(loan);
         }
+
+        public async Task<List<Loan>> GetAll(bool? returned)
+        {
+            var loansQuery = _context.Loans.Include(l => l.Book).Include(l => l.User).AsQueryable();
+
+            if (returned != null)
+            {
+                loansQuery = loansQuery.Where(l => l.IsReturned == returned);
+            }
+            return await loansQuery.ToListAsync();
+        }
     }
 }

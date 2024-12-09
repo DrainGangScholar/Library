@@ -8,5 +8,6 @@ namespace api.Core.Interfaces
         Task<Loan?> AddAsync(Loan loan);
         Task<Loan?> GetByIdWithIncludesAsync(Guid id, params Expression<Func<Loan, object>>[] includes);
         void Update(Loan loan);
+        Task<List<Loan>> GetAll(bool? returned);
     }
 }

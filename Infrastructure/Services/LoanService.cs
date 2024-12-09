@@ -2,19 +2,16 @@ using api.Core.DTOs;
 using api.Core.Entities;
 using api.Core.Interfaces;
 using api.Core.Services;
-using api.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Infrastructure.Services
 {
     class LoanService : ILoanService
     {
-        private readonly DataContext _context;
         private readonly IUnitOfWork _unitOfWork;
 
-        public LoanService(DataContext context, IUnitOfWork unitOfWork)
+        public LoanService(IUnitOfWork unitOfWork)
         {
-            _context = context;
             _unitOfWork = unitOfWork;
         }
 
@@ -70,16 +67,7 @@ namespace api.Infrastructure.Services
 
         public async Task<List<LoanDTO>> GetAllLoans(bool? returned)
         {
-            var loansQuery = _context.Loans.Include(l => l.Book).Include(l => l.User).AsQueryable();
-            if (returned != null)
-            {
-                loansQuery = loansQuery.Where(l => l.IsReturned == returned);
-            }
-            var loans = await loansQuery.ToListAsync();
-            if (loans == null)
-            {
-                return LoanDTO.EmptyList();
-            }
+            var loans = await _unitOfWork.Loans.GetAll(returned);
             return loans.Select(l => LoanDTO.From(l)).ToList();
         }
     }
