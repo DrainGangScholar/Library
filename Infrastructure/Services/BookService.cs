@@ -31,5 +31,28 @@ namespace api.Infrastructure.Services
             var createdBook = await _repository.AddBook(book);
             return BookDTO.From(createdBook);
         }
+
+        public async Task<BookDTO> UpdateBookAsync(UpdateBookDTO request)
+        {
+            var book = await _repository.GetByIdAsync(request.id);
+            if (book == null)
+            {
+                throw new KeyNotFoundException($"Book with {request.id} not found!");
+            }
+            if (request.Name != string.Empty)
+            {
+                book.Name = request.Name;
+            }
+            if (request.Description != string.Empty)
+            {
+                book.Description = request.Description;
+            }
+            if (request.ISBN != string.Empty)
+            {
+                book.ISBN = request.ISBN;
+            }
+            var updatedBook = await _repository.UpdateAsync(book);
+            return BookDTO.From(updatedBook);
+        }
     }
 }

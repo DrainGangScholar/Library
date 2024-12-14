@@ -8,5 +8,6 @@ namespace api.Core.Interfaces
         Task<List<Book>> GetAllBooks(bool? isBorrowed);
         Task<Book?> GetByIdAsync(Guid bookId);
         void Update(Book book);
+        Task<Book> UpdateAsync(Book? book);
     }
 }

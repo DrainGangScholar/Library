@@ -18,5 +18,9 @@ namespace api.API.Controllers
         {
             return Ok(await bookService.AddBook(request));
         }
+        [HttpPut]
+        public async Task<ActionResult<BookDTO>> UpdateBook([FromBody] UpdateBookDTO request){
+            return Ok(await bookService.UpdateBookAsync(request));
+        }
     }
 }

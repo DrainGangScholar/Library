@@ -48,5 +48,12 @@ namespace api.Infrastructure.Repositories
         {
             _context.Books.Update(book);
         }
+
+        public async Task<Book> UpdateAsync(Book book)
+        {
+            var updatedBook = _context.Books.Update(book).Entity;
+            await _context.SaveChangesAsync();
+            return updatedBook;
+        }
     }
 }
